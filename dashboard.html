@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dashboard</title>
+<link rel="stylesheet"
+href="{{ url_for('static',
+filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+<div class="card">
+
+<h2>AI Exam Question Paper Generator</h2>
+
+<form method="POST"
+enctype="multipart/form-data">
+
+<input type="text"
+name="subject"
+placeholder="Subject Name"
+required>
+
+<input type="text"
+name="paper_code"
+placeholder="Paper Code"
+required>
+<input
+type="text"
+name="time_allowed"
+placeholder="Time Allowed (Example: 3 Hours)"
+required>
+
+<textarea
+name="instructions"
+rows="3"
+placeholder="Instructions"
+>All questions are compulsory.
+Attempt only 1 question from each unit.</textarea>
+
+<input type="number"
+name="marks"
+placeholder="Maximum Marks"
+required>
+
+<select name="difficulty">
+
+<option>Easy</option>
+<option>Medium</option>
+<option>Hard</option>
+<option>Mixed</option>
+
+</select>
+
+<textarea
+name="syllabus"
+rows="8"
+placeholder="Paste syllabus">
+</textarea>
+
+<input type="file"
+name="file">
+
+<button type="submit">
+Generate Questions
+</button>
+
+</form>
+
+{% if question_bank %}
+
+<hr>
+<h3>Generated Question Bank</h3>
+
+<form action="/final_paper"
+method="POST">
+
+{% for unit, questions in question_bank.items() %}
+
+<div style="
+margin-top:25px;
+padding:10px;
+border:1px solid #ddd;
+border-radius:8px;
+">
+
+<h2 style="
+text-align:center;
+color:#007bff;
+">
+{{ unit }}
+</h2>
+
+{% for q in questions %}
+
+<div style="
+background:#f5f5f5;
+padding:10px;
+margin:8px 0;
+border-radius:6px;
+">
+
+<label>
+
+<input type="checkbox"
+name="selected_questions"
+value="{{ unit }}||{{ q }}">
+
+{{ q }}
+
+</label>
+
+</div>
+
+{% endfor %}
+</div>
+
+{% endfor %}
+
+<br>
+<input type="hidden"
+name="time_allowed"
+value="{{ request.form.get('time_allowed','') }}">
+
+<input type="hidden"
+name="instructions"
+value="{{ request.form.get('instructions','') }}">
+<br>
+<button type="submit">
+Create Final Paper
+</button>
+
+</form>
+
+{% endif %}
+
+<br>
+
+<a href="/logout">
+<button>Logout</button>
+</a>
+
+</div>
+</div>
+
+</body>
+</html>
